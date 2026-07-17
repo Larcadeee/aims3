@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OPCEN - Resource Tracking</title>
+    
+    <script src="https://cdn.plot.ly/plotly-2.27.0.min.js"></script>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<div class="app-container">
+    <aside class="sidebar">
+        <div class="sidebar-header">
+            <h2>CDRRMD</h2>
+            <p>Operation Center</p>
+        </div>
+        <nav class="sidebar-nav">
+            <a href="index.html" class="nav-item">Dashboard</a>
+            <a href="resource.html" class="nav-item active">Resource</a>
+            <a href="report.html" class="nav-item">Report</a>
+            <a href="weather.html" class="nav-item">Weather</a>
+        </nav>
+    </aside>
+
+    <main class="main-content">
+        <div class="container">
+            <h1>Resource Tracker</h1>
+            <p style="color: #64748b;">Monitor active units, personnel, and equipment availability here.</p>
+            
+            <div class="chart-map-container layout-70-30" style="margin-top: 20px;">
+    
+    <div class="panel">
+        <h3>Fleet Availability Distribution</h3>
+        <p style="color: #64748b; font-size: 0.85rem; margin-bottom: 10px;">Click a segment on the chart to filter the resources list.</p>
+        <div id="resChartDiv" style="height: 450px;"></div>
+        <div id="resLegend" style="text-align: center; padding: 10px; margin-top: 5px;">
+            <span style="color: #94a3b8;">Loading data...</span>
+        </div>
+    </div>
+
+    <div class="panel" id="resource-panel">
+        <h3 id="resource-panel-title">Resources</h3>
+        <div id="resList" class="resource-grid">
+            </div>
+    </div>
+
+</div>
+        </div>
+    </main>
+</div>
+
+<script src="js/resource.js"></script>
+
+</body>
+</html>

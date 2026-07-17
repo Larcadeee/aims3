@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OPCEN - Operational Weather</title>
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<div class="app-container">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+        <div class="sidebar-header">
+            <h2>CDRRMD</h2>
+            <p>Operation Center</p>
+        </div>
+        <nav class="sidebar-nav">
+            <a href="index.html" class="nav-item">Dashboard</a>
+            <a href="resource.html" class="nav-item">Resource</a>
+            <a href="report.html" class="nav-item">Report</a>
+            <a href="weather.html" class="nav-item active">Weather</a>
+        </nav>
+    </aside>
+
+    <!-- Main Content (Standard light background) -->
+    <main class="main-content">
+        <!-- Dynamic soft background overlay -->
+        <div id="weather-bg" class="weather-bg"></div>
+
+        <div class="container">
+            <!-- Header -->
+            <div class="weather-header">
+                <div>
+                    <h2>Operational Weather</h2>
+                    <p id="curr-date">Syncing live meteorological data...</p>
+                </div>
+                <button id="btn-refresh" class="btn btn-primary"><i class="fa-solid fa-rotate-right"></i> Refresh Data</button>
+            </div>
+
+            <!-- Weather Grid Layout -->
+            <div class="weather-grid">
+                
+                <!-- Hero Card -->
+                <div class="card hero-panel">
+                    <div class="hero-top">
+                        <img id="w-icon" src="" alt="Weather Icon" style="display: none;">
+                        <h3 id="loc-name">Loading...</h3>
+                    </div>
+                    <h1 id="curr-temp" class="massive-temp">--°C</h1>
+                    <p class="feels-like">Feels like <span id="feels-like">--°C</span></p>
+                    <p id="w-desc" class="desc-text">--</p>
+                </div>
+
+                <!-- Sun Cycle Card -->
+                <div class="card">
+                    <h3>Solar Cycle</h3>
+                    <div class="sun-grid" style="flex-direction: column;">
+                        <div class="sun-item">
+                            <i class="fa-solid fa-sun"></i>
+                            <div>
+                                <span>Sunrise</span>
+                                <strong id="m-sunrise">--:-- AM</strong>
+                            </div>
+                        </div>
+                        <div class="sun-item">
+                            <i class="fa-solid fa-moon" style="color: #3b82f6;"></i>
+                            <div>
+                                <span>Sunset</span>
+                                <strong id="m-sunset">--:-- PM</strong>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Atmospheric Metrics Card -->
+                <div class="card" style="grid-column: 1 / -1;">
+                    <h3>Atmospheric Conditions</h3>
+                    <div class="weather-metrics-grid">
+                        <div class="weather-metric-card">
+                            <i class="fa-solid fa-droplet"></i>
+                            <span class="m-label">Humidity</span>
+                            <strong id="m-humidity">--%</strong>
+                        </div>
+                        <div class="weather-metric-card">
+                            <i class="fa-solid fa-paper-plane"></i>
+                            <span class="m-label">Wind Speed</span>
+                            <strong id="m-wind">-- m/s</strong>
+                        </div>
+                        <div class="weather-metric-card">
+                            <i class="fa-solid fa-arrow-up-right-dots"></i>
+                            <span class="m-label">Wind Gust</span>
+                            <strong id="m-gust">-- m/s</strong>
+                        </div>
+                        <div class="weather-metric-card">
+                            <i class="fa-solid fa-eye"></i>
+                            <span class="m-label">Visibility</span>
+                            <strong id="m-vis">-- km</strong>
+                        </div>
+                        <div class="weather-metric-card">
+                            <i class="fa-solid fa-cloud"></i>
+                            <span class="m-label">Cloud Cover</span>
+                            <strong id="m-clouds">--%</strong>
+                        </div>
+                        <div class="weather-metric-card">
+                            <i class="fa-solid fa-gauge"></i>
+                            <span class="m-label">Pressure</span>
+                            <strong id="m-pressure">-- hPa</strong>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Operational Impact Card -->
+                <div class="card impact-panel">
+                    <h3>Operational Impact Summary</h3>
+                    <div id="impact-content">
+                        <div style="color: #6b7280;">Analyzing meteorological threats...</div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </main>
+</div>
+
+<script src="js/weather.js"></script>
+</body>
+</html>

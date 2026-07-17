@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OPCEN - Report & Query</title>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<div class="app-container">
+    <aside class="sidebar">
+        <div class="sidebar-header"><h2>CDRRMD</h2><p>Operation Center</p></div>
+        <nav class="sidebar-nav">
+            <a href="index.html" class="nav-item">Dashboard</a>
+            <a href="resource.html" class="nav-item">Resource</a>
+            <a href="report.html" class="nav-item active">Report</a>
+            <a href="weather.html" class="nav-item">Weather</a>
+        </nav>
+    </aside>
+    <main class="main-content">
+        <div class="container">
+            <h1>E-Log Report Generation</h1>
+            <div class="panel filter-panel">
+                <div class="filter-group">
+                    <label>Date</label>
+                    <input type="date" id="filter-date" class="form-control">
+                </div>
+                <div class="filter-group">
+                    <label>Notification Time</label>
+                    <input type="text" id="filter-time" class="form-control" placeholder="e.g., 14:30">
+                </div>
+                <div class="filter-group" style="flex: 2;">
+                    <label>Keyword Search</label>
+                    <input type="text" id="filter-search" class="form-control" placeholder="Search incidents...">
+                </div>
+                <div class="filter-actions">
+                    <button id="btn-clear" class="btn btn-secondary">Clear Filters</button>
+                </div>
+            </div>
+            <div class="panel table-panel">
+                <div class="table-responsive">
+                    <table class="elog-table" id="elog-table">
+                        <thead><tr id="table-header-row"></tr></thead>
+                        <tbody id="table-body"></tbody>
+                    </table>
+                </div>
+                <div id="record-count" style="padding:15px; font-size: 0.85rem; color: #64748b;"></div>
+            </div>
+        </div>
+    </main>
+</div>
+<iframe id="print-frame" style="display: none;"></iframe>
+<script src="js/report.js"></script>
+</body>
+</html>
