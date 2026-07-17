@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OPCEN - News & Updates</title>
+    
+    <!-- Font Awesome for icons (if needed in the future) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Uses your unified design system -->
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<div class="app-container">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+        <div class="sidebar-header">
+            <h2>CDRRMD</h2>
+            <p>Operation Center</p>
+        </div>
+        <nav class="sidebar-nav">
+            <a href="index.html" class="nav-item">Main</a>
+            <a href="resource.html" class="nav-item">Resource</a>
+            <a href="report.html" class="nav-item">Report</a>
+            <a href="weather.html" class="nav-item">Weather</a>
+            <a href="news.html" class="nav-item active">News</a>
+        </nav>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="container">
+            <!-- Page Header -->
+            <div class="page-header" style="margin-bottom: 24px;">
+                <h1>News & Updates</h1>
+                <p style="color: #64748b; margin-top: 6px;">Live announcements, advisories, and updates from the official CDRRMD - Butuan Facebook Page.</p>
+            </div>
+
+            <!-- News Feed Card -->
+            <div class="card" style="padding: 0; overflow: hidden; min-height: 70vh;">
+                <!-- RSS App Widget Container -->
+                <div style="padding: 20px;">
+                    <!-- The specific ID provided in your snippet -->
+                    <rssapp-imageboard id="Bc1w9vIdO326cXS1"></rssapp-imageboard>
+                </div>
+            </div>
+        </div>
+    </main>
+</div>
+
+<!-- Load the custom JS file -->
+<script src="js/news.js"></script>
+</body>
+</html>
