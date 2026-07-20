@@ -3,13 +3,12 @@
    ======================================================== */
 body {
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-    background: linear-gradient(135deg, #62b4dd, #f3f4f8);
+    background: #f9fafb;
     margin: 0;
     color: #86a1cc;
     height: 100vh;
+    width: 100vw;
     display: flex;
-    align-items: center;
-    justify-content: center;
     overflow: hidden;
 }
 
@@ -17,15 +16,15 @@ h1, h2, h3 { margin-top: 0; }
 h1 { color: #111827; font-weight: 700; font-size: 1.8rem; letter-spacing: -0.5px; }
 hr { border: 0; border-top: 1px dashed #e2e8f0; margin: 30px 0; }
 
-/* --- Floating App Container --- */
+/* --- Full Screen App Container --- */
 .app-container {
     display: flex;
     background-color: #ffffff;
-    width: 95vw;
-    max-width: 1600px;
-    height: 90vh;
-    border-radius: 30px;
-    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.4);
+    width: 100vw;
+    max-width: 100%;
+    height: 100vh;
+    border-radius: 0;
+    box-shadow: none;
     overflow: hidden;
 }
 
@@ -35,8 +34,8 @@ hr { border: 0; border-top: 1px dashed #e2e8f0; margin: 30px 0; }
     height: 100%;
     overflow-y: auto;
     padding: 40px;
-    background-color: #f9fafb; /* The light background shade */
-    position: relative; /* Required for dynamic weather backgrounds */
+    background-color: #f9fafb;
+    position: relative;
     z-index: 1;
 }
 
@@ -44,7 +43,11 @@ hr { border: 0; border-top: 1px dashed #e2e8f0; margin: 30px 0; }
 .main-content::-webkit-scrollbar-track { background: transparent; }
 .main-content::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
 
-.container { max-width: 1400px; margin: auto; }
+.container { 
+    width: 100%; 
+    max-width: 100%; 
+    margin: 0; 
+}
 
 /* ========================================================
    2. SIDEBAR NAVIGATION
@@ -83,7 +86,7 @@ a.nav-item.active {
 }
 
 /* ========================================================
-   3. SHARED COMPONENTS (Buttons, Inputs, Standard Panels)
+   3. SHARED COMPONENTS
    ======================================================== */
 .panel {
     background: #ffffff;
@@ -91,6 +94,7 @@ a.nav-item.active {
     border-radius: 20px;
     border: none;
     box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05);
+    margin-bottom: 30px;
 }
 
 .panel h3 { color: #111827; font-size: 1.1rem; margin-bottom: 20px; font-weight: 600; }
@@ -123,12 +127,13 @@ a.nav-item.active {
 }
 .form-control:focus { border-color: #4f46e5; box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1); }
 
+
 /* ========================================================
    4. DASHBOARD PAGE
    ======================================================== */
 .metrics-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
     gap: 20px;
     margin-bottom: 25px;
 }
@@ -149,8 +154,25 @@ a.nav-item.active {
 .metric-label { font-size: 0.85rem; color: #64748b; font-weight: 500; }
 .metric-value { font-size: 2.2rem; font-weight: 700; color: #111827; margin-top: 10px; }
 
-.chart-map-container { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 20px; }
-#chartDiv, #mapDiv { width: 100%; height: 350px; }
+.chart-map-container { 
+    display: grid; 
+    grid-template-columns: 1fr 1fr; 
+    gap: 20px; 
+    margin-bottom: 20px; 
+}
+
+#chartDiv, #mapDiv { 
+    width: 100%; 
+    height: 350px; 
+    background: #e2e8f0; 
+    border-radius: 12px; 
+    color: #64748b;
+    position: relative; 
+    overflow: hidden; 
+    /* display: flex;            <-- REMOVED */
+    /* align-items: center;      <-- REMOVED */
+    /* justify-content: center;  <-- REMOVED */
+}
 
 /* ========================================================
    5. RESOURCE TRACKING PAGE
@@ -159,7 +181,7 @@ a.nav-item.active {
 
 .resource-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); 
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); 
     gap: 15px;
     max-height: 480px; 
     overflow-y: auto; 
@@ -229,9 +251,8 @@ a.nav-item.active {
 }
 .btn-print-sm:hover { background-color: #3b82f6; box-shadow: 0 2px 4px rgba(59, 130, 246, 0.3); }
 
-
 /* ========================================================
-   7. OPERATIONAL WEATHER DASHBOARD (Light Modern Aesthetic)
+   7. OPERATIONAL WEATHER DASHBOARD
    ======================================================== */
 .weather-bg {
     position: absolute;
@@ -242,7 +263,6 @@ a.nav-item.active {
     transition: background .6s ease;
 }
 
-/* Soft Weather Backgrounds overlaying the light theme */
 .bg-clear-day { background: linear-gradient(180deg, #dceeff 0%, #f5fbff 100%); }
 .bg-clear-night { background: linear-gradient(180deg, #1e293b 0%, #0f172a 100%); }
 .bg-clouds-day { background: linear-gradient(180deg, #eef3f8 0%, #f8fafc 100%); }
@@ -255,9 +275,8 @@ a.nav-item.active {
 .weather-header h2 { margin: 0; font-size: 2rem; font-weight: 700; color: #111827; }
 .weather-header p { margin-top: 6px; color: #6b7280; }
 
-.weather-grid { display: grid; grid-template-columns: 2fr 1fr; gap: 24px; align-items: start; }
+.weather-grid { display: grid; grid-template-columns: 2fr 1fr; gap: 24px; align-items: start; margin-bottom: 40px; }
 
-/* The elegant light Card */
 .card {
     background: #ffffff;
     border: 1px solid #e7ebf0;
@@ -276,7 +295,7 @@ a.nav-item.active {
 .feels-like { font-size: 1rem; color: #6b7280; margin: 0;}
 .desc-text { margin-top: 12px; color: #6b7280; font-size: 1rem; line-height: 1.6; text-transform: capitalize;}
 
-.weather-metrics-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+.weather-metrics-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 24px; }
 .weather-metric-card {
     background: #fafbfd; border: 1px solid #e7ebf0; border-radius: 16px; padding: 20px;
     display: flex; flex-direction: column; gap: 8px; transition: .2s;
@@ -286,7 +305,7 @@ a.nav-item.active {
 .m-label { font-size: .75rem; font-weight: 600; color: #64748b; text-transform: uppercase; letter-spacing: .05em; }
 .weather-metric-card strong { font-size: 1.4rem; color: #111827; }
 
-.sun-grid { display: flex; gap: 16px; }
+.sun-grid { display: flex; gap: 16px; grid-column: 1 / -1; margin-bottom: 24px; }
 .sun-item { flex: 1; display: flex; align-items: center; gap: 16px; background: #fafbfd; border: 1px solid #e7ebf0; border-radius: 16px; padding: 20px; }
 .sun-item i { font-size: 2rem; color: #f59e0b; }
 .sun-item span { font-size: .85rem; color: #64748b; }
