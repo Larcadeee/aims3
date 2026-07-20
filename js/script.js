@@ -78,7 +78,9 @@ async function loadDashboard() {
         document.getElementById('val-avg-run').innerText = getAverageTime(cleanedData, 'COMPUTED RUN TIME');
         document.getElementById('val-avg-response').innerText = getAverageTime(cleanedData, 'COMPUTED RESPONSE TIME');
 
-        // --- Chart Generation (Modern Deep Indigo Spline) ---
+  // ========================================================
+        // --- Chart Generation (Modern Smooth Area Chart) ---
+        // ========================================================
         const chartData = cleanedData
             .map(row => {
                 const secs = timeToSeconds(row['AVERAGED TURN AROUND TIME']);
@@ -87,56 +89,52 @@ async function loadDashboard() {
                     y: secs !== null ? secs / 60 : null // Convert to minutes
                 };
             })
-            .filter(d => d.x && d.x.getTime() && d.y !== null)
-            .sort((a, b) => a.x - b.x);
+            .filter(d => d.x && !isNaN(d.x.getTime()) && d.y !== null)
+            .sort((a, b) => a.x - b.x); // Ensure chronological order
 
         if (chartData.length > 0) {
-            const traceLine = {
+            const traceArea = {
                 x: chartData.map(d => d.x),
                 y: chartData.map(d => d.y),
-                mode: 'lines+markers', 
+                mode: 'lines', // Removed markers (dots) for a much cleaner look
                 type: 'scatter',
+                fill: 'tozeroy', // Creates the filled "Area Chart" aesthetic
+                fillcolor: 'rgba(79, 70, 229, 0.15)', // Soft translucent indigo fill
                 line: { 
-                    shape: 'spline', // Smooth curves
-                    color: '#312e81', // Deep indigo/purple matching the image
-                    width: 2 
-                },
-                marker: {
-                    size: 6,
-                    color: '#ffffff', // White interior dots
-                    line: {
-                        color: '#312e81', // Indigo border on dots
-                        width: 2
-                    }
+                    shape: 'spline', // Smooth curving lines
+                    smoothing: 1.2,
+                    color: '#4f46e5', // Bright indigo line
+                    width: 3 
                 },
                 name: 'Turn Around',
-                hovertemplate: '<b>%{y:.1f} mins</b><br>%{x}<extra></extra>' 
+                // Formats the hover tool to show "Jul 20, 02:09 PM"
+                hovertemplate: '<b>%{y:.1f} mins</b><br>%{x|%b %d, %I:%M %p}<extra></extra>' 
             };
             
             const layout = {
-                margin: { t: 10, r: 20, l: 40, b: 40 },
+                margin: { t: 20, r: 20, l: 50, b: 40 },
                 paper_bgcolor: 'rgba(0,0,0,0)', 
                 plot_bgcolor: 'rgba(0,0,0,0)',
                 font: { family: 'inherit', color: '#64748b' },
                 hovermode: 'x unified', 
                 yaxis: { 
-                    title: '',
-                    gridcolor: '#f1f5f9', // Very faint dashed-looking grid
-                    zerolinecolor: '#e2e8f0'
+                    title: 'Minutes',
+                    gridcolor: '#e2e8f0', // Faint horizontal lines
+                    zerolinecolor: '#cbd5e1',
+                    zerolinewidth: 2
                 },
                 xaxis: { 
                     title: '',
-                    gridcolor: 'transparent', // No vertical lines
-                    zerolinecolor: '#e2e8f0'
+                    showgrid: false, // Turned off vertical lines to make it look clean
+                    zeroline: false
                 }
             };
 
-            Plotly.newPlot('chartDiv', [traceLine], layout, {responsive: true});
+            Plotly.newPlot('chartDiv', [traceArea], layout, {responsive: true, displayModeBar: false});
             
         } else {
-            document.getElementById('chartDiv').innerHTML = "<p style='color:gray;'>No matching numeric records available.</p>";
+            document.getElementById('chartDiv').innerHTML = "<p style='color:gray; text-align:center; padding-top:20px;'>No numeric records available.</p>";
         }
-
         // --- Map Generation ---
         if (rawMapData) {
             let geojson = rawMapData;
@@ -186,7 +184,7 @@ async function loadDashboard() {
                 mapbox: {
                     style: "carto-positron",
                     center: { lat: 8.94, lon: 125.54 },
-                    zoom: 11
+                    zoom: 12.5 // <-- INCREASED from 11 to zoom in default view
                 },
                 margin: { t: 0, b: 0, l: 0, r: 0 },
                 paper_bgcolor: 'rgba(0,0,0,0)',
@@ -198,6 +196,85 @@ async function loadDashboard() {
             document.getElementById('mapDiv').innerHTML = "<p style='color:red;'>Failed to load Boundary.json</p>";
         }
 
+// ========================================================
+        // --- 25% Column: Stacked Pie Charts Generation ---
+        // ========================================================
+        
+        let radiusCounts = {};
+        let typeCounts = {};
+
+        // 1. Tally the data from the E-Log
+        cleanedData.forEach(row => {
+            let radius = row['KM RADIUS'];
+            if(radius && radius.trim() !== "") {
+                radiusCounts[radius.trim()] = (radiusCounts[radius.trim()] || 0) + 1;
+            }
+            
+            let type = row['INCIDENT TYPE'];
+            if(type && type.trim() !== "") {
+                typeCounts[type.trim()] = (typeCounts[type.trim()] || 0) + 1;
+            }
+        });
+
+        // --- Common Legend Settings ---
+        // Positions legend to the right side and shrinks font to maximize chart size
+        const sideLegend = {
+            orientation: 'v',
+            y: 0.5,            // Vertically center the legend
+            yanchor: 'middle',
+            font: { size: 9, color: '#64748b' } // Small font to fit narrow column
+        };
+
+        // 2. Render KM Radius Chart (Top)
+        const radiusDataObj = [{
+            values: Object.values(radiusCounts),
+            labels: Object.keys(radiusCounts),
+            type: 'pie',
+            hole: 0.6, 
+            marker: { colors: ['#4f46e5', '#94a3b8'] }, 
+            textinfo: 'none', // Hides text on the slice itself to prevent clutter
+            hoverinfo: 'label+value+percent'
+        }];
+
+        const radiusLayout = {
+            margin: { t: 10, b: 10, l: 0, r: 0 }, // 0 side margins to push chart to the edges
+            showlegend: true,
+            legend: sideLegend,
+            paper_bgcolor: 'rgba(0,0,0,0)',
+            plot_bgcolor: 'rgba(0,0,0,0)'
+        };
+
+        Plotly.newPlot('radiusChartDiv', radiusDataObj, radiusLayout, {responsive: true, displayModeBar: false});
+
+        // 3. Render Incident Types Chart (Bottom)
+        const typeColors = ['#ef4444', '#f59e0b', '#10b981', '#3b82f6', '#8b5cf6', '#64748b'];
+
+        // Truncate long labels so they don't crush the chart in the narrow 25% column
+        const originalTypeLabels = Object.keys(typeCounts);
+        const shortTypeLabels = originalTypeLabels.map(label => 
+            label.length > 22 ? label.substring(0, 22) + "..." : label
+        );
+
+        const typeDataObj = [{
+            values: Object.values(typeCounts),
+            labels: shortTypeLabels, // Uses short text for the side legend
+            hovertext: originalTypeLabels, // Uses full text for the hover popup
+            type: 'pie',
+            hole: 0.6,
+            marker: { colors: typeColors },
+            textinfo: 'none', 
+            hoverinfo: 'text+percent' // Triggers the full hovertext
+        }];
+
+        const typeLayout = {
+            margin: { t: 10, b: 10, l: 0, r: 0 },
+            showlegend: true,
+            legend: sideLegend,
+            paper_bgcolor: 'rgba(0,0,0,0)',
+            plot_bgcolor: 'rgba(0,0,0,0)'
+        };
+
+        Plotly.newPlot('typeChartDiv', typeDataObj, typeLayout, {responsive: true, displayModeBar: false});
     } catch (error) {
         console.error("Error loading dashboard:", error);
     }

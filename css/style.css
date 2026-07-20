@@ -154,24 +154,66 @@ a.nav-item.active {
 .metric-label { font-size: 0.85rem; color: #64748b; font-weight: 500; }
 .metric-value { font-size: 2.2rem; font-weight: 700; color: #111827; margin-top: 10px; }
 
-.chart-map-container { 
-    display: grid; 
-    grid-template-columns: 1fr 1fr; 
-    gap: 20px; 
-    margin-bottom: 20px; 
+/* --- New 75/25 Layout for Map Row --- */
+.layout-75-25 {
+    display: grid;
+    grid-template-columns: 3fr 1fr; /* 75% for the map, 25% for the right column */
+    gap: 20px;
+    margin-bottom: 20px;
 }
 
-#chartDiv, #mapDiv { 
+/* --- Decoupled Chart Heights --- */
+#mapDiv { 
     width: 100%; 
-    height: 350px; 
+    height: 550px; /* Extended height for Map */
+    background: #e2e8f0; 
+    border-radius: 12px; 
+    position: relative; 
+    overflow: hidden; 
+}
+
+#chartDiv { 
+    width: 100%; 
+    height: 280px; /* Reduced height for Trend Chart */
     background: #e2e8f0; 
     border-radius: 12px; 
     color: #64748b;
     position: relative; 
     overflow: hidden; 
-    /* display: flex;            <-- REMOVED */
-    /* align-items: center;      <-- REMOVED */
-    /* justify-content: center;  <-- REMOVED */
+}
+
+/* --- 30/70 Layout for Bottom Row --- */
+.layout-30-70 {
+    display: grid;
+    grid-template-columns: 3fr 7fr;
+    gap: 20px;
+    margin-bottom: 20px;
+}
+
+/* --- Mini Metric Cards (for 30% column) --- */
+.mini-metric-card {
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    padding: 15px 20px;
+    border-radius: 12px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.mini-metric-label {
+    font-size: 0.75rem;
+    color: #64748b;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.mini-metric-value {
+    font-size: 1.6rem; /* Smaller than the top row metrics */
+    font-weight: 700;
+    color: #111827;
+    margin-top: 5px;
 }
 
 /* ========================================================
@@ -334,3 +376,73 @@ a.nav-item.active {
     .sun-grid { flex-direction: column; }
     .massive-temp { font-size: 4rem; }
 }
+
+/* ========================================================
+   8. GLOBAL RESPONSIVENESS
+   ======================================================== */
+@media (max-width: 1200px) {
+    .chart-map-container.layout-70-30, 
+    .layout-70-30, 
+    .layout-75-25 { /* Added the new layout here */
+        grid-template-columns: 1fr; 
+    }
+}
+
+
+
+/* --- Panel Layout Utilities --- */
+.panel-no-margin {
+    margin-bottom: 0;
+}
+
+.trend-panel {
+    margin-top: 20px;
+}
+
+/* --- Stacked Pie Chart Column --- */
+.stacked-charts-panel {
+    margin-bottom: 0;
+    display: flex;
+    flex-direction: column;
+    height: 550px;
+    padding: 20px;
+}
+
+.chart-subtitle {
+    font-size: 1rem;
+    margin-bottom: 10px;
+    color: #475569;
+}
+
+.chart-divider {
+    margin: 15px 0;
+    width: 100%;
+}
+
+/* --- Decoupled Chart Heights & Flex Properties --- */
+#mapDiv { 
+    width: 100%; 
+    height: 550px; 
+    background: #e2e8f0; 
+    border-radius: 12px; 
+    position: relative; 
+    overflow: hidden; 
+}
+
+#chartDiv { 
+    width: 100%; 
+    height: 280px; 
+    background: #e2e8f0; 
+    border-radius: 12px; 
+    position: relative; 
+    overflow: hidden; 
+}
+
+/* Make sure the pie charts shrink/grow properly inside the flex column */
+#radiusChartDiv, #typeChartDiv {
+    flex: 1;
+    min-height: 0; 
+    width: 100%;
+    position: relative;
+}
+

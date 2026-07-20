@@ -57,33 +57,70 @@
 
             <hr>
 
-            <div class="chart-map-container">
-                <div class="panel">
-                    <h3>Turn Around Time Trend</h3>
-                    <div id="chartDiv"></div>
-                </div>
-                <div class="panel">
+            <!-- Map Row: 75% Map / 25% Stacked Pie Charts -->
+            <div class="layout-75-25">
+                <!-- 75% Heat Map -->
+                <div class="panel panel-no-margin">
                     <h3>Butuan City Incident Heat Map</h3>
                     <div id="mapDiv"></div>
                 </div>
+                
+                <!-- 25% Right Column (Stacked Charts) -->
+                <div class="panel stacked-charts-panel">
+                    
+                    <!-- Top Chart: KM Radius -->
+                    <h3 class="chart-subtitle">KM Radius Distribution</h3>
+                    <div id="radiusChartDiv"></div>
+                    
+                    <hr class="chart-divider">
+                    
+                    <!-- Bottom Chart: Incident Type -->
+                    <h3 class="chart-subtitle">Incident Types</h3>
+                    <div style="flex: 1; display: flex; flex-direction: column; min-height: 0;">
+                        <!-- The Chart -->
+                        <div id="typeChartDiv" style="flex: 1; min-height: 0; width: 100%;"></div>
+                        
+                        <!-- Custom HTML Legend -->
+                        <div id="typeLegend" style="display: grid; grid-template-columns: 1fr 1fr; gap: 6px; margin-top: 5px; overflow-y: auto; max-height: 70px;">
+                            <!-- Legend injected via JS -->
+                        </div>
+                    </div>
+                    
+                </div>
+            </div>
+            <hr>
+            <!-- Bottom Row: 30% Stacked Avg Metrics / 70% Trend Chart -->
+            <div class="layout-30-70">
+                
+                <!-- 30% Left Column (Stacked Mini Metrics) -->
+                <div class="panel panel-no-margin" style="display: flex; flex-direction: column; gap: 15px;">
+                    <h3 style="margin-bottom: 5px;">Average Times</h3>
+                    
+                    <div class="mini-metric-card">
+                        <div class="mini-metric-label">Avg Dispatch Time</div>
+                        <div class="mini-metric-value" id="val-avg-dispatch">00:00:00</div>
+                    </div>
+                    
+                    <div class="mini-metric-card">
+                        <div class="mini-metric-label">Avg Run Time</div>
+                        <div class="mini-metric-value" id="val-avg-run">00:00:00</div>
+                    </div>
+                    
+                    <div class="mini-metric-card">
+                        <div class="mini-metric-label">Avg Response Time</div>
+                        <div class="mini-metric-value" id="val-avg-response">00:00:00</div>
+                    </div>
+                </div>
+
+                <!-- 70% Right Column (Trend Chart) -->
+                <div class="panel panel-no-margin">
+                    <h3>Turn Around Time Trend</h3>
+                    <div id="chartDiv"></div>
+                </div>
+
             </div>
 
             <hr>
-
-            <div class="metrics-grid" style="grid-template-columns: repeat(3, 1fr);">
-                <div class="metric-card">
-                    <div class="metric-label">Avg Dispatch Time</div>
-                    <div class="metric-value" id="val-avg-dispatch">00:00:00</div>
-                </div>
-                <div class="metric-card">
-                    <div class="metric-label">Avg Run Time</div>
-                    <div class="metric-value" id="val-avg-run">00:00:00</div>
-                </div>
-                <div class="metric-card">
-                    <div class="metric-label">Avg Response Time</div>
-                    <div class="metric-value" id="val-avg-response">00:00:00</div>
-                </div>
-            </div>
         </div>
     </main>
 </div>
