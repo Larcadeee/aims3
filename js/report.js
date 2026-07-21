@@ -5,7 +5,7 @@ const ELOG_CSV_URL = `https://docs.google.com/spreadsheets/d/${ELOG_SHEET_ID}/ex
 
 let globalElogData = [];
 let tableHeaders = [];
-let currentFilteredData = []; // Store current view for printing
+let currentFilteredData = []; 
 
 async function loadElogData() {
     try {
@@ -26,7 +26,7 @@ async function loadElogData() {
         const cleanedCsvText = csvLines.slice(headerIndex).join('\n');
         const rawData = d3.csvParse(cleanedCsvText);
 
-        // 2. Clean data and extract headers
+        // 2. Clean data, extract headers, and REVERSE so latest is at the top
         tableHeaders = rawData.columns.map(col => col.trim()).filter(col => col.length > 0);
 
         globalElogData = rawData.map(row => {
@@ -37,10 +37,12 @@ async function loadElogData() {
                 }
             }
             return newRow;
-        }).filter(row => Object.values(row).some(val => val && val.trim() !== "")); 
+        }).filter(row => Object.values(row).some(val => val && val.trim() !== "")).reverse(); // <--- Reverses data so newest is index 0
 
         currentFilteredData = globalElogData;
-        renderTable(currentFilteredData);
+        
+        // Pass false for isFiltered on initial load
+        renderTable(currentFilteredData, false);
 
     } catch (error) {
         console.error("Error loading E-Log data:", error);
@@ -50,26 +52,28 @@ async function loadElogData() {
     }
 }
 
-function renderTable(data) {
+function renderTable(data, isFiltered = false) {
     const thead = document.getElementById('table-header-row');
     const tbody = document.getElementById('table-body');
     const countDiv = document.getElementById('record-count');
 
-    // Render Headers (adding the Action column)
+    // Render Headers 
     if (thead.innerHTML.trim() === "") {
         let headersHtml = tableHeaders.map(header => `<th>${header}</th>`).join('');
         headersHtml += `<th style="position: sticky; right: 0; background-color: #f8fafc; text-align: center; border-left: 2px solid #e2e8f0;">Action</th>`;
         thead.innerHTML = headersHtml;
     }
 
+    // LIMIT TO 10 LATEST ONLY IF NO FILTERS ARE APPLIED
+    const displayData = isFiltered ? data : data.slice(0, 10);
+
     // Render Body
-    if (data.length === 0) {
+    if (displayData.length === 0) {
         tbody.innerHTML = `<tr><td colspan="${tableHeaders.length + 1}" style="text-align:center; color:#94a3b8;">No records match your filters.</td></tr>`;
     } else {
-        tbody.innerHTML = data.map((row, index) => {
+        tbody.innerHTML = displayData.map((row, index) => {
             let rowHtml = tableHeaders.map(header => `<td>${row[header] || '-'}</td>`).join('');
             
-            // Add Print Button Column (Sticky to the right side of the scrollable table)
             rowHtml += `
                 <td style="position: sticky; right: 0; background-color: #ffffff; text-align: center; border-left: 1px solid #e2e8f0;">
                     <button class="btn-print-sm" onclick="printRow(${index})">🖨️ Print</button>
@@ -79,7 +83,12 @@ function renderTable(data) {
         }).join('');
     }
 
-    countDiv.innerText = `Showing ${data.length} record(s)`;
+    // Update the record count text to reflect the current view state
+    if (!isFiltered && data.length > 10) {
+        countDiv.innerText = `Showing 10 latest of ${data.length} total record(s)`;
+    } else {
+        countDiv.innerText = `Showing ${displayData.length} matching record(s)`;
+    }
 }
 
 // --- FILTERING LOGIC ---
@@ -87,6 +96,9 @@ function applyFilters() {
     const dateInput = document.getElementById('filter-date').value; 
     const timeInput = document.getElementById('filter-time').value.toLowerCase().trim();
     const searchInput = document.getElementById('filter-search').value.toLowerCase().trim();
+
+    // Check if any filter field has text in it
+    const isFiltered = (dateInput !== "" || timeInput !== "" || searchInput !== "");
 
     let filteredData = globalElogData.filter(row => {
         let matches = true;
@@ -113,21 +125,23 @@ function applyFilters() {
         return matches;
     });
 
-    currentFilteredData = filteredData; // Update active state
-    renderTable(currentFilteredData);
+    currentFilteredData = filteredData; 
+    
+    // Pass the isFiltered flag to tell the table whether to slice to 10 or show all
+    renderTable(currentFilteredData, isFiltered);
 }
 
 // --- PRINTING LOGIC ---
 function printRow(index) {
+    // Because displayData always starts from index 0 of currentFilteredData,
+    // this index matches perfectly whether filtered or sliced!
     const row = currentFilteredData[index];
     
-    // Helper to safely get values
     const getVal = (keyStr) => {
         const key = tableHeaders.find(h => h.toLowerCase().includes(keyStr.toLowerCase()));
         return (key && row[key] && row[key].trim() !== "") ? row[key] : "N/A";
     };
 
-    // Format HTML to match the provided image reference
     const printHTML = `
         <!DOCTYPE html>
         <html>
@@ -227,11 +241,9 @@ function printRow(index) {
         </html>
     `;
 
-    // Inject into the hidden iframe and trigger print
     const printFrame = document.getElementById('print-frame');
     printFrame.srcdoc = printHTML;
     
-    // Wait for the iframe content to load before calling print()
     printFrame.onload = function() {
         printFrame.contentWindow.print();
     };
@@ -246,7 +258,7 @@ document.getElementById('btn-clear').addEventListener('click', () => {
     document.getElementById('filter-date').value = "";
     document.getElementById('filter-time').value = "";
     document.getElementById('filter-search').value = "";
-    applyFilters();
+    applyFilters(); 
 });
 
 // Initialize on page load
