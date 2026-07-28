@@ -528,3 +528,189 @@ select.filter-select {
     }
 }
 
+/* ========================================================
+   BENTO BOX NEWS FEED STYLES (REFINED)
+   ======================================================== */
+
+.news-feed-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-auto-rows: 320px; /* Increased height to give content & buttons room */
+    gap: 24px;
+    grid-auto-flow: dense; 
+}
+
+/* Base Post Card */
+.fb-post-card {
+    background: #ffffff;
+    border: 1px solid #f1f5f9; /* Softer, lighter border */
+    border-radius: 16px; /* Smooth corners matching reference */
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 4px 15px -3px rgba(0, 0, 0, 0.05); /* Softer drop shadow */
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    position: relative;
+}
+
+.fb-post-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 15px 25px -5px rgba(0, 0, 0, 0.1);
+}
+
+/* Default Post Image (For standard 1x1 blocks) */
+.fb-post-img {
+    width: 100%;
+    height: 150px; /* Fixed height so text always aligns */
+    object-fit: cover; /* Prevents stretching and distortion */
+    border-bottom: 1px solid #f1f5f9;
+}
+
+/* Content Area */
+.fb-post-content {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1; /* Forces content to take up all space below image */
+    box-sizing: border-box;
+}
+
+.fb-post-date {
+    font-size: 0.75rem;
+    color: #64748b;
+    margin-bottom: 8px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.fb-post-message {
+    font-size: 0.875rem;
+    color: #334155;
+    line-height: 1.5;
+    margin-bottom: 15px;
+    
+    /* Strict Truncation to prevent pushing buttons out */
+    display: -webkit-box;
+    -webkit-line-clamp: 3; 
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.fb-post-link {
+    margin-top: auto; /* CRITICAL FIX: Always pushes button to the very bottom */
+    display: block;
+    text-align: center;
+    background: #eff6ff; /* Soft UI blue */
+    color: #2563eb;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 0.85rem;
+    padding: 10px;
+    border-radius: 8px;
+    transition: 0.2s;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.fb-post-link:hover {
+    background: #dbeafe;
+}
+
+/* ========================================================
+   BENTO BOX SIZES (Dynamic Layouts)
+   ======================================================== */
+
+/* 1. Hero Bento (Spans 2x2, Image Background with Overlay) */
+.bento-hero {
+    grid-column: span 2;
+    grid-row: span 2;
+    border: none;
+}
+.bento-hero .fb-post-img {
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 100%;
+    border: none;
+    z-index: 1;
+}
+.bento-hero::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0; right: 0; height: 60%; /* Smoother gradient fade */
+    background: linear-gradient(to top, rgba(15, 23, 42, 0.95) 0%, transparent 100%);
+    z-index: 2;
+    pointer-events: none; /* Let clicks pass through */
+}
+.bento-hero .fb-post-content {
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    z-index: 3;
+    color: white;
+    height: auto; /* Content grows UPWARDS so button is never hidden */
+    padding: 25px 30px; 
+}
+.bento-hero .fb-post-date, 
+.bento-hero .fb-post-message {
+    color: #f8fafc;
+}
+.bento-hero .fb-post-message {
+    font-size: 1rem;
+    -webkit-line-clamp: 4; 
+}
+.bento-hero .fb-post-link {
+    background: rgba(255, 255, 255, 0.15);
+    color: white;
+    backdrop-filter: blur(4px);
+    margin-top: 15px; 
+}
+.bento-hero .fb-post-link:hover {
+    background: rgba(255, 255, 255, 0.25);
+}
+
+/* 2. Tall Bento (Spans 1 Col x 2 Rows) */
+.bento-tall {
+    grid-row: span 2;
+}
+.bento-tall .fb-post-img {
+    height: 250px; /* Taller image to balance the card */
+}
+.bento-tall .fb-post-message {
+    -webkit-line-clamp: 12; /* Fills up the vertical space nicely */
+    font-size: 0.95rem;
+}
+
+/* 3. Wide Bento (Spans 2 Cols x 1 Row) */
+.bento-wide {
+    grid-column: span 2;
+    flex-direction: row; /* Puts image on left, text on right matching reference */
+}
+.bento-wide .fb-post-img {
+    width: 40%;
+    height: 100%;
+    border-bottom: none;
+    border-right: 1px solid #f1f5f9;
+}
+.bento-wide .fb-post-message {
+    -webkit-line-clamp: 4;
+}
+
+/* --- Mobile Responsiveness --- */
+@media (max-width: 1024px) {
+    .news-feed-grid { grid-template-columns: repeat(2, 1fr); }
+    .bento-hero { grid-column: span 2; }
+    .bento-tall { grid-row: span 1; }
+    .bento-tall .fb-post-img { height: 150px; }
+    .bento-tall .fb-post-message { -webkit-line-clamp: 3; }
+    .bento-wide { grid-column: span 2; flex-direction: column; }
+    .bento-wide .fb-post-img { width: 100%; height: 160px; border-right: none; border-bottom: 1px solid #f1f5f9; }
+}
+
+@media (max-width: 768px) {
+    .news-feed-grid { grid-template-columns: 1fr; grid-auto-rows: auto; }
+    .fb-post-card { grid-column: span 1 !important; grid-row: span 1 !important; flex-direction: column !important; min-height: 320px; }
+    .bento-hero { min-height: 420px; } 
+    .bento-hero .fb-post-img { position: absolute; height: 100%; }
+    .bento-wide .fb-post-img { width: 100%; height: 180px; border-right: none; position: relative;}
+    .bento-tall .fb-post-img { height: 180px; position: relative;}
+}

@@ -5,10 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>OPCEN - News & Updates</title>
     
-    <!-- Font Awesome for icons (if needed in the future) -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
-    <!-- Uses your unified design system -->
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
@@ -33,28 +30,27 @@
     <main class="main-content">
         <div class="container">
             <!-- Page Header -->
-            <div class="page-header" style="margin-bottom: 24px;">
+            <div class="page-header news-header">
                 <h1>News & Updates</h1>
-                <p style="color: #64748b; margin-top: 6px;">Live announcements, advisories, and updates from the official CDRRMD - Butuan Facebook Page.</p>
+                <p class="header-subtitle">Live announcements, advisories, and updates from the official CDRRMD - Butuan Facebook Page.</p>
             </div>
 
-            <!-- News Feed Card -->
-            <div class="card" style="padding: 0; overflow: hidden; min-height: 70vh;">
-                <!-- RSS App Widget Container -->
-                <div style="padding: 20px;">
-                    <!-- The specific ID provided in your snippet -->
-                    <rssapp-imageboard id="Bc1w9vIdO326cXS1"></rssapp-imageboard>
+            <!-- News Feed Container -->
+            <div class="card news-panel">
+                <div id="fb-feed-container" class="news-feed-grid">
+                    <div class="news-loading">
+                        <i class="fa-solid fa-circle-notch fa-spin"></i> Fetching live posts from Facebook...
+                    </div>
                 </div>
             </div>
         </div>
     </main>
 </div>
 
-<!-- Load the custom JS file -->
 <script src="js/news.js"></script>
 
 <script async type='module' src='https://interfaces.zapier.com/assets/web-components/zapier-interfaces/zapier-interfaces.esm.js'></script>
-        <zapier-interfaces-chatbot-embed is-popup='true' chatbot-id='cmrp6znr200akg36lnxbq5l4l'></zapier-interfaces-chatbot-embed>
+<zapier-interfaces-chatbot-embed is-popup='true' chatbot-id='cmrp6znr200akg36lnxbq5l4l'></zapier-interfaces-chatbot-embed>
 
 </body>
 </html>
