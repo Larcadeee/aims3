@@ -50,7 +50,7 @@ hr { border: 0; border-top: 1px dashed #e2e8f0; margin: 30px 0; }
 }
 
 /* ========================================================
-   2. SIDEBAR NAVIGATION
+   2. SIDEBAR NAVIGATION (ICON-ONLY COLLAPSE)
    ======================================================== */
 .sidebar {
     width: 250px;
@@ -61,10 +61,31 @@ hr { border: 0; border-top: 1px dashed #e2e8f0; margin: 30px 0; }
     padding-top: 20px;
     z-index: 10;
     flex-shrink: 0;
+    transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1); /* Animates the width */
+    overflow-x: hidden; /* Prevents text from spilling out while shrinking */
+    white-space: nowrap; /* Keeps text on one line */
+}
+
+/* --- The Collapsed State --- */
+.sidebar.collapsed {
+    width: 80px; /* Shrinks to icon-only size */
+}
+
+/* Hide text when collapsed */
+.sidebar.collapsed .sidebar-header span,
+.sidebar.collapsed .sidebar-header p,
+.sidebar.collapsed .nav-item span {
+    display: none; 
+}
+
+/* Center the logo icon when collapsed */
+.sidebar.collapsed .sidebar-header h2 {
+    text-align: center;
+    font-size: 1.8rem;
 }
 
 .sidebar-header { padding: 20px 25px; margin-bottom: 20px; }
-.sidebar-header h2 { margin: 0; font-size: 1.5rem; color: #ffffff; }
+.sidebar-header h2 { margin: 0; font-size: 1.5rem; color: #ffffff; display: flex; align-items: center; gap: 12px; }
 .sidebar-header p { margin: 5px 0 0 0; font-size: 0.8rem; color: #818cf8; }
 
 .sidebar-nav { display: flex; flex-direction: column; gap: 10px; padding: 0 15px; }
@@ -76,16 +97,53 @@ a.nav-item {
     font-weight: 500;
     color: #94a3b8;
     transition: all 0.2s ease;
-    display: block;
+    display: flex;
+    align-items: center;
+    gap: 15px; /* Space between icon and text */
 }
 
-a.nav-item:hover { color: #ffffff; }
+/* Fix icon width so they stack perfectly */
+a.nav-item i {
+    font-size: 1.2rem;
+    min-width: 24px; 
+    text-align: center;
+}
+
+/* Center icons and remove padding when collapsed */
+.sidebar.collapsed a.nav-item {
+    padding: 15px 0;
+    justify-content: center;
+}
+
+a.nav-item:hover { color: #ffffff; background: rgba(255,255,255,0.05); }
 a.nav-item.active {
     background-color: #4f46e5;
     color: #ffffff;
     box-shadow: 0 4px 15px rgba(79, 70, 229, 0.4);
 }
 
+/* --- Sidebar Toggle Button --- */
+.sidebar-toggle {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    color: #475569;
+    font-size: 1.1rem;
+    width: 42px;
+    height: 42px;
+    border-radius: 12px;
+    cursor: pointer;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.03);
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.sidebar-toggle:hover {
+    background: #f8fafc;
+    color: #111827;
+    border-color: #cbd5e1;
+}
 /* ========================================================
    3. SHARED COMPONENTS
    ======================================================== */
@@ -205,7 +263,9 @@ select.filter-select {
 .stacked-charts-panel { display: flex; flex-direction: column; height: 550px; padding: 20px; margin-bottom: 0;}
 .chart-subtitle { font-size: 1rem; margin-bottom: 10px; color: #475569; }
 .chart-divider { margin: 15px 0; width: 100%; }
-#radiusChartDiv, #typeChartDiv { flex: 1; min-height: 0; width: 100%; position: relative; }
+
+/* Chart Base Styles - min-height added to prevent squishing */
+#radiusChartDiv, #typeChartDiv { flex: 1; min-height: 220px; width: 100%; position: relative; }
 
 /* Mini Metrics */
 .mini-metric-card { background: #f8fafc; border: 1px solid #e2e8f0; padding: 15px 20px; border-radius: 12px; display: flex; flex-direction: column; justify-content: center; }
@@ -319,12 +379,6 @@ select.filter-select {
 .m-label { font-size: .75rem; font-weight: 600; color: #64748b; text-transform: uppercase; letter-spacing: .05em; }
 .weather-metric-card strong { font-size: 1.4rem; color: #111827; }
 
-.sun-grid { display: flex; gap: 16px; grid-column: 1 / -1; margin-bottom: 24px; }
-.sun-item { flex: 1; display: flex; align-items: center; gap: 16px; background: #fafbfd; border: 1px solid #e7ebf0; border-radius: 16px; padding: 20px; }
-.sun-item i { font-size: 2rem; color: #f59e0b; }
-.sun-item span { font-size: .85rem; color: #64748b; }
-.sun-item strong { display: block; margin-top: 4px; font-size: 1.2rem; color: #111827; }
-
 .impact-panel { grid-column: 1 / -1; }
 .impact-alert { border-radius: 16px; padding: 20px 24px; border: 1px solid; font-size: .95rem; line-height: 1.7; }
 .impact-alert.normal { background: #ecfdf5; border-color: #bbf7d0; color: #166534; }
@@ -378,9 +432,18 @@ select.filter-select {
         grid-template-columns: 1fr; 
     }
     
-    /* Auto height for stacked charts to prevent stretching */
-    .stacked-charts-panel { height: auto; min-height: 400px; }
-    #radiusChartDiv, #typeChartDiv { min-height: 250px; }
+    /* FIX: Turn off flexbox to prevent the charts from crushing each other */
+    .stacked-charts-panel { 
+        display: block; 
+        height: auto; 
+    }
+    
+    /* FIX: Give each chart a strict explicit height so the JS library draws them properly */
+    #radiusChartDiv, #typeChartDiv { 
+        height: 320px; 
+        min-height: 320px;
+        margin-bottom: 10px; /* Add breathing room between them */
+    }
 }
 
 /* Tablet (Portrait) */
@@ -439,7 +502,6 @@ select.filter-select {
     
     /* Mobile Grids */
     .weather-metrics-grid { grid-template-columns: 1fr; }
-    .sun-grid { flex-direction: column; }
     
     /* Further reduce map height */
     #mapDiv { height: 350px; }

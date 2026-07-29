@@ -343,5 +343,52 @@ function renderDashboard(dataToRender) {
     }
 }
 
+// ========================================================
+// SIDEBAR ICON-ONLY TOGGLE LOGIC
+// ========================================================
+document.addEventListener("DOMContentLoaded", () => {
+    const sidebar = document.querySelector('.sidebar');
+    const toggleBtn = document.getElementById('sidebarToggle');
+
+    if (toggleBtn && sidebar) {
+        toggleBtn.addEventListener('click', () => {
+            // Toggles the shrink effect
+            sidebar.classList.toggle('collapsed');
+            
+            // Flips the chevron icon direction
+            const icon = toggleBtn.querySelector('i');
+            if (sidebar.classList.contains('collapsed')) {
+                icon.classList.remove('fa-chevron-left');
+                icon.classList.add('fa-chevron-right');
+            } else {
+                icon.classList.remove('fa-chevron-right');
+                icon.classList.add('fa-chevron-left');
+            }
+        });
+    }
+});
+
+document.addEventListener("DOMContentLoaded", () => {
+    const sidebar = document.querySelector('.sidebar');
+    const toggleBtn = document.getElementById('sidebarToggle');
+
+    if (toggleBtn && sidebar) {
+        toggleBtn.addEventListener('click', () => {
+            // Toggles the shrink effect
+            sidebar.classList.toggle('collapsed');
+            
+            // Flips the chevron icon direction
+            const icon = toggleBtn.querySelector('i');
+            if (sidebar.classList.contains('collapsed')) {
+                icon.classList.remove('fa-chevron-left');
+                icon.classList.add('fa-chevron-right');
+            } else {
+                icon.classList.remove('fa-chevron-right');
+                icon.classList.add('fa-chevron-left');
+            }
+        });
+    }
+});
+
 // Start
 window.onload = initDashboard;

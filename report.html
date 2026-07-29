@@ -4,24 +4,46 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>OPCEN - Report & Query</title>
+    
     <script src="https://d3js.org/d3.v7.min.js"></script>
+    
+    <!-- Added FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
 <div class="app-container">
+    
+    <!-- 1. UPDATED SIDEBAR WITH ICONS AND SPANS -->
     <aside class="sidebar">
-        <div class="sidebar-header"><h2>CDRRMD</h2><p>Operation Center</p></div>
+        <div class="sidebar-header">
+            <h2><i class="fa-solid fa-shield-halved"></i> <span>CDRRMD</span></h2>
+            <p><span>Operation Center</span></p>
+        </div>
         <nav class="sidebar-nav">
-            <a href="index.html" class="nav-item">Main</a>
-            <a href="resource.html" class="nav-item">Resource</a>
-            <a href="report.html" class="nav-item active">Report</a>
-            <a href="weather.html" class="nav-item">Weather</a>
-            <a href="news.html" class="nav-item">News</a>
+            <a href="index.html" class="nav-item"><i class="fa-solid fa-chart-line"></i> <span>Main</span></a>
+            <a href="resource.html" class="nav-item"><i class="fa-solid fa-truck-medical"></i> <span>Resource</span></a>
+            <a href="report.html" class="nav-item active"><i class="fa-solid fa-file-lines"></i> <span>Report</span></a>
+            <a href="weather.html" class="nav-item"><i class="fa-solid fa-cloud-sun"></i> <span>Weather</span></a>
+            <a href="news.html" class="nav-item"><i class="fa-solid fa-newspaper"></i> <span>News</span></a>
         </nav>
     </aside>
+    
     <main class="main-content">
         <div class="container">
-            <h1>E-Log Report Generation</h1>
+            
+            <!-- 2. UPDATED HEADER WITH TOGGLE BUTTON -->
+            <div style="margin-bottom: 25px;">
+                <div style="display: flex; align-items: center; gap: 15px;">
+                    <!-- The Sidebar Toggle Button -->
+                    <button id="sidebarToggle" class="sidebar-toggle" style="margin-bottom: 0;">
+                        <i class="fa-solid fa-angles-left"></i>
+                    </button>
+                    <h1 class="header-title" style="margin: 0;">E-Log Report Generation</h1>
+                </div>
+            </div>
+
+            <!-- Filter Panel -->
             <div class="panel filter-panel">
                 <div class="filter-group">
                     <label>Date</label>
@@ -39,6 +61,8 @@
                     <button id="btn-clear" class="btn btn-secondary">Clear Filters</button>
                 </div>
             </div>
+            
+            <!-- Table Panel -->
             <div class="panel table-panel">
                 <div class="table-responsive">
                     <table class="elog-table" id="elog-table">
@@ -48,14 +72,41 @@
                 </div>
                 <div id="record-count" style="padding:15px; font-size: 0.85rem; color: #64748b;"></div>
             </div>
+            
         </div>
     </main>
 </div>
 <iframe id="print-frame" style="display: none;"></iframe>
+
+<!-- 3. TOGGLE LOGIC EMBEDDED FOR THIS PAGE -->
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+    const sidebar = document.querySelector('.sidebar');
+    const toggleBtn = document.getElementById('sidebarToggle');
+
+    if (toggleBtn && sidebar) {
+        toggleBtn.addEventListener('click', () => {
+            // Toggles the shrink effect
+            sidebar.classList.toggle('collapsed');
+            
+            // Flips the angles icon direction
+            const icon = toggleBtn.querySelector('i');
+            if (sidebar.classList.contains('collapsed')) {
+                icon.classList.remove('fa-angles-left');
+                icon.classList.add('fa-angles-right');
+            } else {
+                icon.classList.remove('fa-angles-right');
+                icon.classList.add('fa-angles-left');
+            }
+        });
+    }
+});
+</script>
+
 <script src="js/report.js"></script>
 
 <script async type='module' src='https://interfaces.zapier.com/assets/web-components/zapier-interfaces/zapier-interfaces.esm.js'></script>
-        <zapier-interfaces-chatbot-embed is-popup='true' chatbot-id='cmrp6znr200akg36lnxbq5l4l'></zapier-interfaces-chatbot-embed>
+<zapier-interfaces-chatbot-embed is-popup='true' chatbot-id='cmrp6znr200akg36lnxbq5l4l'></zapier-interfaces-chatbot-embed>
 
 </body>
 </html>
